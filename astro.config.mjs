@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import AutoImport from "astro-auto-import";
+import opengraphImages, { presets } from "astro-opengraph-images";
 import { defineConfig, squooshImageService } from "astro/config";
 import remarkCollapse from "remark-collapse";
 import remarkToc from "remark-toc";
@@ -10,7 +11,9 @@ import config from "./src/config/config.json";
 
 // https://astro.build/config
 export default defineConfig({
-  site: config.site.base_url ? config.site.base_url : "http://examplesite.com",
+  site: config.site.base_url
+    ? config.site.base_url
+    : "https://mine-astroplate.vercel.app/",
   base: config.site.base_path ? config.site.base_path : "/",
   trailingSlash: config.site.trailing_slash ? "always" : "never",
   image: {
@@ -36,6 +39,21 @@ export default defineConfig({
       ],
     }),
     mdx(),
+    opengraphImages({
+      options: {
+        fonts: [
+          {
+            name: "Roboto",
+            weight: 400,
+            style: "normal",
+            data: fs.readFileSync(
+              "node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff",
+            ),
+          },
+        ],
+      },
+      render: presets.blackAndWhite,
+    }),
   ],
   markdown: {
     remarkPlugins: [
